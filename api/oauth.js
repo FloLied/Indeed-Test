@@ -17,6 +17,7 @@ module.exports = async (req, res) => {
 
         res.status(200).json(response.data);
     } catch (error) {
+        console.error('Error in OAuth request:', error.message);  // Fehlerprotokollierung
         res.status(error.response ? error.response.status : 500).json({ error: error.message });
     }
 };
