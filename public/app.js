@@ -1,34 +1,39 @@
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const query = document.getElementById('searchInput').value;
+    console.log(`Searching for: ${query}`);
     searchJobs(query);
 });
 
 async function searchJobs(query) {
-    const clientId = '58dd3c4aed72f194b8b0a73b20b407d1e14e97ffaf916b9821cac7595df04614';  // Ersetze durch deine Client ID
-    const clientSecret = 'aFia0DRcyVyR9b8mQiHogFQhkdvLSXz5mapvdLdfJQxaCgQJwFBl82qbKHq7Hgoj';  // Ersetze durch deinen Client Secret
-    const authToken = btoa(`${clientId}:${clientSecret}`);
-
     try {
-        const tokenResponse = await fetch('https://apis.indeed.com/oauth/v2/tokens', {
+        // Anfrage für das Access Token
+        const tokenResponse = await fetch('/api/oauth', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Basic ${authToken}`
-            },
-            body: 'grant_type=client_credentials'
-        });
-
-        const tokenData = await tokenResponse.json();
-        const accessToken = tokenData.access_token;
-
-        const response = await fetch(`https://apis.indeed.com/v2/search?q=${query}`, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Content-Type': 'application/json'
             }
         });
 
+        if (!tokenResponse.ok) {
+            throw new Error('Token request failed with status: ' + tokenResponse.status);
+        }
+
+        const tokenData = await tokenResponse.json();
+        console.log('Token data:', tokenData);
+
+        const accessToken = tokenData.access_token;
+
+        // Anfrage für die Jobsuche
+        const response = await fetch(`/api/search?query=${query}&accessToken=${accessToken}`);
+
+        if (!response.ok) {
+            throw new Error('Job search request failed with status: ' + response.status);
+        }
+
         const data = await response.json();
+        console.log('Job search data:', data);
+
         displayResults(data);
     } catch (error) {
         console.error('Error fetching data', error);
