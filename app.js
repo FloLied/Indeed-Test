@@ -5,8 +5,8 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
 });
 
 async function searchJobs(query) {
-    const clientId = 'Y58dd3c4aed72f194b8b0a73b20b407d1e14e97ffaf916b9821cac7595df04614';  // Ersetze durch deine Client ID
-    const clientSecret = 'YaFia0DRcyVyR9b8mQiHogFQhkdvLSXz5mapvdLdfJQxaCgQJwFBl82qbKHq7Hgoj';  // Ersetze durch deinen Client Secret
+    const clientId = '58dd3c4aed72f194b8b0a73b20b407d1e14e97ffaf916b9821cac7595df04614';  // Ersetze durch deine Client ID
+    const clientSecret = 'aFia0DRcyVyR9b8mQiHogFQhkdvLSXz5mapvdLdfJQxaCgQJwFBl82qbKHq7Hgoj';  // Ersetze durch deinen Client Secret
     const authToken = btoa(`${clientId}:${clientSecret}`);
 
     try {
